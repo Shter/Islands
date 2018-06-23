@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Title</title>
+</head>
+<body>
+<script>
+    const islands = [
+        [8,8,8,8,8,8]
+        [8,1,1,1,1,8],
+        [8,1,1,1,0,8],
+        [8,0,0,1,0,8],
+        [8,8,8,8,8,8]
+    ];
+    let newIslands = [];
+    let tempValue;
+
+    for(i = 0; i < islands.length; i++){
+        newIslands.push([])
+    }
+    newIslands.forEach(function (el ,ind){
+        for (i = 0; i < islands[0].length; i++ ){
+            newIslands[ind].push(0)
+        }
+    });
+
+    let countIsland = 0;
+
+    countIsl = (row, elem) => {
+        for (row = 0; row < islands.length; row++) {
+            islands[row].forEach(function (numb, elem) {
+                if (islands[row][elem] == 1 && newIslands[row][elem] == 0) {
+                    countIsland++;
+                    drawIsl(row, elem)
+                }
+            })
+        }console.log(countIsland)
+    };
+
+    findFork = () => {
+        for(row = 0; row < islands.length; row++) {
+            islands[row].forEach(function(numb, elem) {
+                if (numb == 'fork'){
+                    drawIsl(row, elem)
+                }else{
+                    countIsl()
+                }
+            })
+        }
+    };
+
+    drawIsl = (row, elem) => {
+        tempValue = newIslands[row][elem];
+        newIslands[row][elem] = 1;
+        console.log(row);
+        search(row, elem)
+    };
+
+    movement = (direction) => {
+        if(direction == "right") {
+            ++elem;
+            drawIsl(row, elem)
+        }else if(direction == "left") {
+            --elem;
+            drawIsl(row, elem)
+        }else if (direction == "down") {
+            ++row;
+            drawIsl(row, elem)
+        }else if (direction == "up") {
+            --row;
+            drawIsl(row, elem)
+        }
+    };
+
+    search = (row, elem) => {
+        let count = 0;
+        console.log(row - 1);
+        if (row - 1 && row + 1 && elem - 1 && elem + 1){
+            if (islands[row - 1][elem] == 1) {
+                count++
+            }
+            if (islands[row][elem + 1] == 1) {
+                count++
+            }
+            if (islands[row + 1][elem] == 1) {
+                count++
+            }
+            if (islands[row][elem - 1] == 1){
+                count++
+            }
+        }
+        switch(count) {
+            case '<= 1':
+                newIslands[row][elem] = 'fork';
+            case '4':
+                findFork()
+        }
+        if(row == 0 && elem == 0) { //left up
+            if (islands[row][elem + 1] == tempValue && newIslands[row][elem + 1] == 0) {
+                movement('right')
+            }else if (islands[row + 1][elem] == tempValue && newIslands[row + 1][elem] == 0) {
+                movement('down')
+            }
+        }else if (row == newIslands.length - 1 && elem == 0) { //left down
+            if (islands[(islands.length - 1) - 1][elem] == tempValue && newIslands[(newIslands.length - 1) - 1][elem] == 0) {
+                movement('up')
+            }else if (islands[row][elem + 1] == tempValue && newIslands[row][elem + 1] == 0) {
+                movement('right')
+            }
+        }else if (row == 0 && elem == newIslands[row].length - 1) { // right up
+            if (islands[row + 1][elem] == tempValue && newIslands[row + 1][elem] == 0) {
+                movement('down')
+            }else if (islands[row][elem + 1] == tempValue && elem == newIslands[0][(length - 1) - 1]== 0) {
+                movement('left')
+            }
+        }else if (row == islands[(islands.length - 1) - 1][elem] && newIslands[(newIslands.length - 1) - 1][elem] == 0){ //riht down
+            if (islands[row][elem + 1] == tempValue && elem == newIslands[0][(length - 1) - 1] == 0) {
+                movement('left')
+            }else if (islands[(islands.length - 1) - 1][elem] == tempValue && newIslands[(newIslands.length - 1) - 1][elem] == 0) {
+                movement('up')
+            }
+        }else if (row == 0){ // up
+            if (islands[row][elem + 1] == tempValue && newIslands[row][elem + 1] == 0) {
+                movement('right')
+            }else if (islands[row + 1][elem] == tempValue && newIslands[row + 1][elem] == 0) {
+                movement('down')
+            }else if (islands[row][elem + 1] == tempValue && elem == newIslands[0][(length - 1) - 1] == 0) {
+                movement('left')
+            }
+        }else if (row == islands.length - 1) { // down
+            if (islands[(islands.length - 1) - 1][elem] == tempValue && newIslands[(newIslands.length - 1) - 1][elem] == 0) {
+                movement('up')
+            }else if (islands[row][elem + 1] == tempValue && newIslands[row][elem + 1] == 0) {
+                movement('right')
+            }else if (islands[row][elem + 1] == tempValue && elem == newIslands[0][(length - 1) - 1] == 0) {
+                movement('left')
+            }
+        }else if (elem == 0) { //left
+            if (islands[(islands.length - 1) - 1][elem] == tempValue && newIslands[(newIslands.length - 1) - 1][elem] == 0) {
+                movement('up')
+            }else if (islands[row][elem + 1] == tempValue && newIslands[row][elem + 1] == 0) {
+                movement('right')
+            }else if (islands[row + 1][elem] == tempValue && newIslands[row + 1][elem] == 0) {
+                movement('down')
+            }
+        }else if (elem == newIslands[row].length - 1) { // right
+            if (islands[(islands.length - 1) - 1][elem] == tempValue && newIslands[(newIslands.length - 1) - 1][elem] == 0) {
+                movement('up')
+            }else if (islands[row + 1][elem] == tempValue && newIslands[row + 1][elem] == 0) {
+                movement('down')
+            }else if (islands[row][elem + 1] == tempValue && elem == newIslands[0][(length - 1) - 1] == 0) {
+                movement('left')
+            }
+        }else{
+            if (islands[(islands.length - 1) - 1][elem] == tempValue && newIslands[(newIslands.length - 1) - 1][elem] == 0) {
+                movement('up')
+            }else if (islands[row][elem + 1] == tempValue && newIslands[row][elem + 1] == 0) {
+                movement('right')
+            }else if (islands[row + 1][elem] == tempValue && newIslands[row + 1][elem] == 0) {
+                movement('down')
+            }else if (islands[row][elem + 1] == tempValue && elem == newIslands[0][(length - 1) - 1] == 0) {
+                movement('left')
+            }
+        findFork();
+        }
+        tempValue = newIslands[row][elem]
+    };
+
+    console.log(newIslands);
+    countIsl();
+
+</script>
+</body>
